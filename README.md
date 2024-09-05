@@ -10,7 +10,7 @@
 cd TodoApp.Web 
 dotnet add package Microsoft.EntityFrameworkCore
 dotnet add package Microsoft.EntityFrameworkCore.Design
-
+dotnet add package Microsoft.AspNetCore.Authentication.JwtBearer
 # dotnet add package Swashbuckle.AspNetCore.Swagger
 # dotnet add package Swashbuckle.AspNetCore
 dotnet add package FastEndpoints
@@ -22,6 +22,12 @@ dotnet add package Microsoft.EntityFrameworkCore
 dotnet add package Microsoft.EntityFrameworkCore.Design
 dotnet add package Microsoft.AspNetCore.Identity
 dotnet add package Microsoft.AspNetCore.Identity.EntityFrameworkCore
+dotnet add package Microsoft.IdentityModel
+dotnet add package System.IdentityModel.Tokens.Jwt
+
+
+cd TodoApp.Core
+dotnet add package Microsoft.AspNetCore.Identity
 ```
 
 ### Migrations
@@ -48,3 +54,12 @@ dotnet ef database update --context ApplicationDbContext --project ../TodoApp.In
 Open the swagger page:
 
 [http://localhost:5131/swagger](http://localhost:5131/swagger)
+
+
+## Security
+
+Development secret key generation for development purposes:
+```bash
+# Command used 
+dd if=/dev/urandom bs=32 count=1 | base64
+```

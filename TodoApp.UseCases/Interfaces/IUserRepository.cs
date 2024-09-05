@@ -15,4 +15,6 @@ public interface IUserRepository
     Task<IEnumerable<User>> GetAllUsersAsync();
     Task UpdateUserAsync(User user);
     Task DeleteUserAsync(int id);
+
+    Task<User?> GetByEmailAndPasswordAsync(string email, string password);
 }

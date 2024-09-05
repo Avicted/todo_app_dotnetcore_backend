@@ -15,6 +15,29 @@ public class UserRepository : IUserRepository
         _context = context;
     }
 
+    public async Task<User?> GetByEmailAndPasswordAsync(string email, string password)
+    {
+        var user = await _context.Users.SingleOrDefaultAsync(u => u.Email == email);
+
+        if (user == null)
+        {
+            // User not found
+            return null;
+        }
+
+        var passwordHasher = new PasswordHasher<User>();
+        var result = passwordHasher.VerifyHashedPassword(user, user.Password, password);
+
+        if (result == PasswordVerificationResult.Success)
+        {
+            // Password is correct
+            return user;
+        }
+
+        // Password is incorrect
+        return null;
+    }
+
     public async Task<User?> GetUserByIdAsync(int id)
     {
         var user = await _context.Users.FindAsync(id);

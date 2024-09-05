@@ -3,6 +3,7 @@ using System.Threading.Tasks;
 using TodoApp.UseCases.Interfaces;
 using TodoApp.Core.Entities;
 using TodoApp.UseCases.DTOs;
+using System;
 
 namespace TodoApp.UseCases.Services;
 
@@ -49,5 +50,11 @@ public class UserService
     public async Task DeleteUserAsync(int id)
     {
         await _userRepository.DeleteUserAsync(id);
+    }
+
+    public async Task<User?> GetUserByEmailAndPasswordAsync(string email, string password)
+    {
+        // Note: In a real application, you should hash and validate the password securely.
+        return await _userRepository.GetByEmailAndPasswordAsync(email, password);
     }
 }
