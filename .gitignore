@@ -1,0 +1,39 @@
+# Compiled files
+*.dll
+*.exe
+*.pdb
+
+# NuGet packages
+*.nuget.props
+*.nuget.targets
+
+# Build results
+[Dd]ebug/
+[Rr]elease/
+obj/
+bin/
+
+# Visual Studio files
+.vs/
+*.vscode/
+*.suo
+*.user
+*.userprefs
+*.lock.json
+*.csproj.user
+
+# Resharper cache
+_resharper/
+
+# Test Results
+[Tt]est[Rr]esult*/
+[Bb]uild[Ll]og.*
+
+# Unity generated folders
+[Ll]ibrary/
+[Tt]emp/
+[Oo]bj/
+[Bb]uild/
+[Bb]uilds/
+[Bb]uild[Ll]ogs/
+s[Ll]n[Ll]og/
