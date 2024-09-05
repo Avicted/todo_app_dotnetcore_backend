@@ -13,6 +13,9 @@
 obj/
 bin/
 
+# Sqlite files
+*.db
+
 # Visual Studio files
 .vs/
 *.vscode/
