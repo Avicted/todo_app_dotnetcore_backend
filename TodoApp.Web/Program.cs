@@ -1,7 +1,7 @@
 using Microsoft.EntityFrameworkCore;
 using TodoApp.UseCases.Interfaces;
 using TodoApp.Infrastructure.Data;
-using TodoApp.Infrastructure.Repositories;
+using TodoApp.Infrastructure.Data.Repositories;
 using TodoApp.UseCases.Services; // Namespace for your repository implementation
 using FastEndpoints;
 using FastEndpoints.Swagger;

@@ -1,11 +1,4 @@
 using FastEndpoints;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Configuration;
-using System;
-using System.Threading;
-using System.Threading.Tasks;
-using TodoApp.Core.Entities;
 using TodoApp.Infrastructure.Services;
 using TodoApp.UseCases.DTOs;
 using TodoApp.UseCases.Services;

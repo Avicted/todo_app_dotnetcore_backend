@@ -12,9 +12,6 @@ public class GetUserByIdEndpoint(UserService userService) : Endpoint<GetUserById
     public override void Configure()
     {
         Get("/api/user/{id}");
-
-        // @Todo(Avic): Add authentication, when login is implemented
-        // AllowAnonymous();
     }
 
     public override async Task HandleAsync(GetUserByIdDTO request, CancellationToken ct)
