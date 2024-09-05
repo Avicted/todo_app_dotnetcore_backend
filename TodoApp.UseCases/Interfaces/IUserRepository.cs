@@ -1,7 +1,9 @@
-using TodoApp.Core.DTOs;
+using TodoApp.UseCases.DTOs;
 using TodoApp.Core.Entities;
+using System.Threading.Tasks;
+using System.Collections.Generic;
 
-namespace TodoApp.Core.Interfaces;
+namespace TodoApp.UseCases.Interfaces;
 
 
 public interface IUserRepository

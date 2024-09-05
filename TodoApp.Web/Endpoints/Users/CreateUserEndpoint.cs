@@ -1,5 +1,5 @@
 using FastEndpoints;
-using TodoApp.Core.DTOs;
+using TodoApp.UseCases.DTOs;
 using TodoApp.UseCases.Services;
 
 namespace TodoApp.Web.Endpoints.Users;
@@ -22,7 +22,7 @@ public class CreateUserEndpoint(UserService userService) : Endpoint<CreateUserDT
         {
             AddError("User already exists");
 
-            await SendErrorsAsync(409, ct); // Conflict
+            await SendErrorsAsync(StatusCodes.Status409Conflict, ct); // Conflict
         }
         else
         {

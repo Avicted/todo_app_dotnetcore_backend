@@ -8,4 +8,8 @@
     <ProjectReference Include="..\TodoApp.Core\TodoApp.Core.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <PackageReference Include="FastEndpoints" Version="5.29.0" />
+  </ItemGroup>
+
 </Project>

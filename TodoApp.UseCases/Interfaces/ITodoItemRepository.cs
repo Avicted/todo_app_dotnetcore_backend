@@ -1,6 +1,8 @@
+using System.Collections.Generic;
+using System.Threading.Tasks;
 using TodoApp.Core.Entities;
 
-namespace TodoApp.Core.Interfaces;
+namespace TodoApp.UseCases.Interfaces;
 
 public interface ITodoItemRepository
 {

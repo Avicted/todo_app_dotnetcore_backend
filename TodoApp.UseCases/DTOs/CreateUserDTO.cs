@@ -1,4 +1,4 @@
-namespace TodoApp.Core.DTOs;
+namespace TodoApp.UseCases.DTOs;
 
 public class CreateUserDTO
 {

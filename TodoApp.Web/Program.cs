@@ -1,13 +1,16 @@
 using Microsoft.EntityFrameworkCore;
-using TodoApp.Core.Interfaces;
+using TodoApp.UseCases.Interfaces;
 using TodoApp.Infrastructure.Data;
 using TodoApp.Infrastructure.Repositories;
 using TodoApp.UseCases.Services; // Namespace for your repository implementation
 using FastEndpoints;
 using Microsoft.AspNetCore.Authentication.Cookies;
+using FastEndpoints.Swagger;
 
 var builder = WebApplication.CreateBuilder(args);
-builder.Services.AddFastEndpoints();
+builder.Services.
+    AddFastEndpoints().
+    SwaggerDocument(); //define a swagger document for the API
 
 // Add services to the container.
 builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
@@ -38,8 +41,6 @@ var app = builder.Build();
 if (app.Environment.IsDevelopment())
 {
     app.UseDeveloperExceptionPage();
-    app.UseSwagger(); // Enable Swagger middleware
-    app.UseSwaggerUI(); // Enable Swagger UI middleware
 }
 
 // Configure the HTTP request pipeline.
@@ -48,7 +49,10 @@ app.UseAuthorization();
 
 app.UseHttpsRedirection();
 app.UseStaticFiles();
-app.UseFastEndpoints();
+
+app.UseFastEndpoints()
+    .UseSwaggerGen();
+
 app.UseRouting();
 app.UseAuthorization();
 // app.MapControllers(); // Maps attribute-routed controllers

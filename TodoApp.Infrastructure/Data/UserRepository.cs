@@ -1,8 +1,8 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
-using TodoApp.Core.DTOs;
+using TodoApp.UseCases.DTOs;
 using TodoApp.Core.Entities;
-using TodoApp.Core.Interfaces;
+using TodoApp.UseCases.Interfaces;
 
 namespace TodoApp.Infrastructure.Data;
 
@@ -15,9 +15,21 @@ public class UserRepository : IUserRepository
         _context = context;
     }
 
-    public async Task<User> GetUserByIdAsync(int id)
+    public async Task<User?> GetUserByIdAsync(int id)
     {
-        return await _context.Users.FindAsync(id);
+        var user = await _context.Users.FindAsync(id);
+
+        if (user != null)
+        {
+            return new User
+            {
+                Id = user.Id,
+                Name = user.Name,
+                Email = user.Email
+            };
+        }
+
+        return null;
     }
 
     public async Task<CreateUserResponseDTO?> AddUserAsync(CreateUserDTO user)

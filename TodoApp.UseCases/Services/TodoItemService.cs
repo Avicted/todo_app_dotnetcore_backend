@@ -1,6 +1,6 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using TodoApp.Core.Interfaces;
+using TodoApp.UseCases.Interfaces;
 using TodoApp.Core.Entities;
 
 namespace TodoApp.UseCases.Services;

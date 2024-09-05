@@ -1,6 +1,6 @@
 using FastEndpoints;
 using FluentValidation;
-using TodoApp.Core.DTOs;
+using TodoApp.UseCases.DTOs;
 
 namespace TodoApp.Web.Endpoints.Users;
 

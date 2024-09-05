@@ -8,9 +8,11 @@
 cd TodoApp.Web 
 dotnet add package Microsoft.EntityFrameworkCore
 dotnet add package Microsoft.EntityFrameworkCore.Design
-dotnet add package Swashbuckle.AspNetCore.Swagger
-dotnet add package Swashbuckle.AspNetCore
+
+# dotnet add package Swashbuckle.AspNetCore.Swagger
+# dotnet add package Swashbuckle.AspNetCore
 dotnet add package FastEndpoints
+dotnet add package FastEndpoints.Swagger
 
 cd TodoApp.Infrastructure
 dotnet add package Microsoft.EntityFrameworkCore.Sqlite
