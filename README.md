@@ -1,5 +1,7 @@
 # Dotnet Core minimal Clean Architecture
 
+## Work in progress!
+
 ### Initial setup, already done
 ```bash
 # From project root
