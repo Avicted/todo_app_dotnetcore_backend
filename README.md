@@ -1,6 +1,6 @@
 # Dotnet Core minimal Clean Architecture
 
-### Migrations
+### Initial setup, already done
 ```bash
 # From project root
 
@@ -20,7 +20,10 @@ dotnet add package Microsoft.EntityFrameworkCore
 dotnet add package Microsoft.EntityFrameworkCore.Design
 dotnet add package Microsoft.AspNetCore.Identity
 dotnet add package Microsoft.AspNetCore.Identity.EntityFrameworkCore
+```
 
+### Migrations
+```bash
 # Creat a migration
 dotnet ef migrations add <MigrationName> --startup-project  TodoApp.Web/TodoApp.Web.csproj --project TodoApp.Infrastructure/TodoApp.Infrastructure.csproj
 
@@ -29,7 +32,3 @@ cd TodoApp.Web
 dotnet ef database update --context ApplicationDbContext --project ../TodoApp.Infrastructure/TodoApp.Infrastructure.csproj --startup-project TodoApp.Web.csproj
 
 ```
-
-# Todos
-- AutoMapper and DTOs
-- Write FluentValidation for all the models
