@@ -27,8 +27,22 @@ dotnet add package Microsoft.AspNetCore.Identity.EntityFrameworkCore
 # Creat a migration
 dotnet ef migrations add <MigrationName> --startup-project  TodoApp.Web/TodoApp.Web.csproj --project TodoApp.Infrastructure/TodoApp.Infrastructure.csproj
 
-# Update database from within the Web project
+# Update/Seed database from within the Web project
 cd TodoApp.Web
 dotnet ef database update --context ApplicationDbContext --project ../TodoApp.Infrastructure/TodoApp.Infrastructure.csproj --startup-project TodoApp.Web.csproj
 
 ```
+
+# Run the project
+
+```bash
+# Update/Seed database from within the Web project
+cd TodoApp.Web
+dotnet ef database update --context ApplicationDbContext --project ../TodoApp.Infrastructure/TodoApp.Infrastructure.csproj --startup-project TodoApp.Web.csproj
+
+./start.sh
+```
+
+Open the swagger page:
+
+[http://localhost:5131/swagger](http://localhost:5131/swagger)
