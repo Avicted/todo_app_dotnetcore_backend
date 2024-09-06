@@ -8,14 +8,23 @@ public class TodoItemMapping : Profile
 {
     public TodoItemMapping()
     {
-        CreateMap<TodoItem, UpdateTodoItemDTO>();
-        CreateMap<TodoItem, CreateTodoItemResponseDTO>();
+        // Create
         CreateMap<TodoItem, CreateTodoItemDTO>();
-
-        CreateMap<CreateTodoItemResponseDTO, TodoItem>();
-        CreateMap<UpdateTodoItemDTO, TodoItem>();
         CreateMap<CreateTodoItemDTO, TodoItem>();
+        CreateMap<CreateTodoItemDTO, CreateTodoItemResponseDTO>();
+        CreateMap<CreateTodoItemResponseDTO, CreateTodoItemDTO>();
 
+        // Read
+        CreateMap<TodoItem, GetTodoItemByIdDTO>();
+        CreateMap<TodoItem, GetTodoItemByIdResponseDTO>(); // Add this mapping
+
+        CreateMap<GetTodoItemByIdDTO, TodoItem>();
+        CreateMap<GetTodoItemByIdDTO, GetTodoItemByIdResponseDTO>();
+        CreateMap<GetTodoItemByIdResponseDTO, GetTodoItemByIdDTO>();
+
+        // Update
+        CreateMap<TodoItem, UpdateTodoItemDTO>();
+        CreateMap<UpdateTodoItemDTO, TodoItem>();
         CreateMap<UpdateTodoItemDTO, UpdateTodoItemResponseDTO>();
         CreateMap<UpdateTodoItemResponseDTO, UpdateTodoItemDTO>();
 

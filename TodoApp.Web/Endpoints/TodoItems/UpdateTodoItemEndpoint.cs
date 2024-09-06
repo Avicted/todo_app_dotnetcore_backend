@@ -67,7 +67,8 @@ public class UpdateTodoItemEndpoint : Endpoint<UpdateTodoItemDTO, UpdateTodoItem
         }
 
         // Get the TodoItem by the ID
-        var todoItem = await _todoItemService.GetTodoItemByIdAsync(request.Id);
+        var todoItemDTO = new GetTodoItemByIdDTO { Id = request.Id };
+        var todoItem = await _todoItemService.GetTodoItemByIdAsync(todoItemDTO);
 
         _logger.LogInformation("TodoItem found: {0}", todoItem?.Id);
 
@@ -78,7 +79,7 @@ public class UpdateTodoItemEndpoint : Endpoint<UpdateTodoItemDTO, UpdateTodoItem
             return;
         }
 
-        // Update a the TodoItem
+        // Update the TodoItem
         var updatedTodoItem = new UpdateTodoItemDTO
         {
             Id = todoItem.Id,

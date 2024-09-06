@@ -23,9 +23,9 @@ public class TodoItemService
         return await _todoItemRepository.GetAllAsync();
     }
 
-    public async Task<TodoItem> GetTodoItemByIdAsync(int id)
+    public async Task<GetTodoItemByIdResponseDTO?> GetTodoItemByIdAsync(GetTodoItemByIdDTO todoItem)
     {
-        return await _todoItemRepository.GetByIdAsync(id);
+        return await _todoItemRepository.GetByIdAsync(todoItem);
     }
 
     public async Task<CreateTodoItemResponseDTO> AddTodoItemAsync(CreateTodoItemDTO todoItem)

@@ -18,9 +18,15 @@ public class TodoItemRepository : ITodoItemRepository
         _mapper = mapper;
     }
 
-    public async Task<TodoItem?> GetByIdAsync(int id)
+    public async Task<GetTodoItemByIdResponseDTO?> GetByIdAsync(GetTodoItemByIdDTO item)
     {
-        return await _context.TodoItems.FindAsync(id);
+        var todoItem = await _context.TodoItems.FindAsync(item.Id);
+        if (todoItem == null)
+        {
+            return null;
+        }
+
+        return _mapper.Map<GetTodoItemByIdResponseDTO>(todoItem);
     }
 
     public async Task<IEnumerable<TodoItem>> GetAllAsync()
