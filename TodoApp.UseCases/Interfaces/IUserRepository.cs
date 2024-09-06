@@ -1,4 +1,4 @@
-using TodoApp.UseCases.DTOs;
+/*using TodoApp.UseCases.DTOs;
 using TodoApp.Core.Entities;
 using System.Threading.Tasks;
 using System.Collections.Generic;
@@ -17,4 +17,4 @@ public interface IUserRepository
     Task DeleteUserAsync(int id);
 
     Task<User?> GetByEmailAndPasswordAsync(string email, string password);
-}
+}*/

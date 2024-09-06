@@ -1,4 +1,4 @@
-using FastEndpoints;
+/*using FastEndpoints;
 using TodoApp.UseCases.DTOs;
 using TodoApp.Core.Entities;
 using TodoApp.UseCases.Services;
@@ -29,9 +29,10 @@ public class GetUserByIdEndpoint(UserService userService) : Endpoint<GetUserById
             await SendAsync(new GetUserByIdResponseDTO
             {
                 Id = user.Id,
-                Name = user.Name,
+                Name = user.Username,
                 Email = user.Email
             }, StatusCodes.Status200OK, ct); // OK
         }
     }
 }
+*/

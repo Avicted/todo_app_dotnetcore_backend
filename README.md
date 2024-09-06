@@ -15,6 +15,8 @@ dotnet add package Microsoft.AspNetCore.Authentication.JwtBearer
 # dotnet add package Swashbuckle.AspNetCore
 dotnet add package FastEndpoints
 dotnet add package FastEndpoints.Swagger
+ dotnet add package FastEndpoints.Security
+
 
 cd TodoApp.Infrastructure
 dotnet add package Microsoft.EntityFrameworkCore.Sqlite

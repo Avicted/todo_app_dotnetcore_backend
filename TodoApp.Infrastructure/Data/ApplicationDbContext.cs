@@ -1,12 +1,12 @@
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using TodoApp.Core.Entities;
 
 namespace TodoApp.Infrastructure.Data;
 
-public class ApplicationDbContext : DbContext
+public class ApplicationDbContext : IdentityDbContext<User>
 {
     // Define DbSets for your entities
-    public DbSet<User> Users { get; set; }
     public DbSet<TodoItem> TodoItems { get; set; }
 
     public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options)
@@ -19,7 +19,7 @@ public class ApplicationDbContext : DbContext
     {
         base.OnModelCreating(modelBuilder);
 
-        // User has many TodoItems
+        // Configure User-TodoItem relationship
         modelBuilder.Entity<User>()
             .HasMany(u => u.TodoItems)
             .WithOne(t => t.User)

@@ -15,6 +15,7 @@ bin/
 
 # Sqlite files
 *.db
+*.db*
 
 # Visual Studio files
 .vs/

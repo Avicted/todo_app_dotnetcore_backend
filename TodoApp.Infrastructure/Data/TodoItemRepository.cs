@@ -1,5 +1,6 @@
 using Microsoft.EntityFrameworkCore;
 using TodoApp.Core.Entities;
+using TodoApp.UseCases.DTOs;
 using TodoApp.UseCases.Interfaces;
 
 namespace TodoApp.Infrastructure.Data.Repositories;
@@ -23,10 +24,18 @@ public class TodoItemRepository : ITodoItemRepository
         return await _context.TodoItems.ToListAsync();
     }
 
-    public async Task AddAsync(TodoItem item)
+    public async Task<CreateTodoItemResponseDTO> AddAsync(TodoItem item)
     {
-        _context.TodoItems.Add(item);
+        await _context.TodoItems.AddAsync(item);
         await _context.SaveChangesAsync();
+
+        return new CreateTodoItemResponseDTO
+        {
+            Id = item.Id,
+            Title = item.Title,
+            Description = item.Description,
+            IsCompleted = item.IsCompleted
+        };
     }
 
     public async Task UpdateAsync(TodoItem item)

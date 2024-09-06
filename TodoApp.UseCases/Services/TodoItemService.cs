@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using TodoApp.UseCases.Interfaces;
 using TodoApp.Core.Entities;
+using TodoApp.UseCases.DTOs;
 
 namespace TodoApp.UseCases.Services;
 
@@ -24,9 +25,9 @@ public class TodoItemService
         return await _todoItemRepository.GetByIdAsync(id);
     }
 
-    public async Task AddTodoItemAsync(TodoItem todoItem)
+    public async Task<CreateTodoItemResponseDTO> AddTodoItemAsync(TodoItem todoItem)
     {
-        await _todoItemRepository.AddAsync(todoItem);
+        return await _todoItemRepository.AddAsync(todoItem);
     }
 
     public async Task UpdateTodoItemAsync(TodoItem todoItem)
