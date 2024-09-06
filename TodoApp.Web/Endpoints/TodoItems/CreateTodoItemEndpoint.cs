@@ -32,8 +32,8 @@ public class CreateTodoItemEndpoint : Endpoint<CreateTodoItemDTO, CreateTodoItem
         Description(b => b.Produces(403));
         Summary(s =>
         {
-            s.Summary = "short summary goes here";
-            s.Description = "long description goes here";
+            s.Summary = "Create a new TodoItem";
+            s.Description = "The endpoint creates a new TodoItem for the authenticated user.";
             s.ExampleRequest = new TodoItem { Title = "example title", Description = "example description", IsCompleted = false };
             s.ResponseExamples[200] = new CreateTodoItemResponseDTO { Id = 1, Title = "example title", Description = "example description", IsCompleted = false, UserId = "example" };
         });
