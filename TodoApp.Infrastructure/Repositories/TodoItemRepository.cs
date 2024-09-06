@@ -57,13 +57,20 @@ public class TodoItemRepository : ITodoItemRepository
         return _mapper.Map<UpdateTodoItemResponseDTO>(item);
     }
 
-    public async Task DeleteAsync(int id)
+    public async Task<DeleteTodoItemResponseDTO?> DeleteAsync(DeleteTodoItemDTO item)
     {
-        var item = await _context.TodoItems.FindAsync(id);
-        if (item != null)
+        var todoItem = await _context.TodoItems.FindAsync(item.Id);
+        if (todoItem == null)
         {
-            _context.TodoItems.Remove(item);
-            await _context.SaveChangesAsync();
+            return null;
         }
+
+        _context.TodoItems.Remove(todoItem);
+        await _context.SaveChangesAsync();
+
+        return new DeleteTodoItemResponseDTO
+        {
+            Id = todoItem.Id,
+        };
     }
 }

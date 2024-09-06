@@ -18,5 +18,11 @@ public class TodoItemMapping : Profile
 
         CreateMap<UpdateTodoItemDTO, UpdateTodoItemResponseDTO>();
         CreateMap<UpdateTodoItemResponseDTO, UpdateTodoItemDTO>();
+
+        // Delete
+        CreateMap<TodoItem, DeleteTodoItemDTO>();
+        CreateMap<DeleteTodoItemDTO, TodoItem>();
+        CreateMap<DeleteTodoItemDTO, DeleteTodoItemResponseDTO>();
+        CreateMap<DeleteTodoItemResponseDTO, DeleteTodoItemDTO>();
     }
 }

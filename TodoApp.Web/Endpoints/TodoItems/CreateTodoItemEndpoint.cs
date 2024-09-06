@@ -1,10 +1,8 @@
 using FastEndpoints;
-using FastEndpoints.Swagger; // Add this using directive
 using TodoApp.UseCases.DTOs;
 using TodoApp.UseCases.Services;
 using System.Security.Claims;
 using TodoApp.Core.Entities;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 
 namespace TodoApp.Web.Endpoints.TodoItems;

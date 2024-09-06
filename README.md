@@ -56,3 +56,7 @@ Open the swagger page:
 
 [http://localhost:1337/swagger](http://localhost:5131/swagger)
 
+
+
+# Swagger
+![Swagger page](swagger.png "Swagger page")

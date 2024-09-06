@@ -13,5 +13,5 @@ public interface ITodoItemRepository
     Task<IEnumerable<TodoItem>> GetAllAsync();
     Task<CreateTodoItemResponseDTO> AddAsync(CreateTodoItemDTO item);
     Task<UpdateTodoItemResponseDTO?> UpdateAsync(UpdateTodoItemDTO item);
-    Task DeleteAsync(int id);
+    Task<DeleteTodoItemResponseDTO?> DeleteAsync(DeleteTodoItemDTO item);
 }

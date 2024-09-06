@@ -38,8 +38,9 @@ public class TodoItemService
         return _mapper.Map<UpdateTodoItemResponseDTO>(await _todoItemRepository.UpdateAsync(todoItem));
     }
 
-    public async Task DeleteTodoItemAsync(int id)
+    public async Task<DeleteTodoItemResponseDTO> DeleteTodoItemAsync(DeleteTodoItemDTO todoItem)
     {
-        await _todoItemRepository.DeleteAsync(id);
+        return _mapper.Map<DeleteTodoItemResponseDTO>(await _todoItemRepository.DeleteAsync(todoItem));
     }
+
 }
