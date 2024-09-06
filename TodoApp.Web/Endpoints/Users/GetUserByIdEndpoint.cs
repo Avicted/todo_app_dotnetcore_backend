@@ -1,38 +1,57 @@
-/*using FastEndpoints;
+using FastEndpoints;
 using TodoApp.UseCases.DTOs;
 using TodoApp.Core.Entities;
-using TodoApp.UseCases.Services;
+using Microsoft.AspNetCore.Identity;
 
 namespace TodoApp.Web.Endpoints.Users;
 
-public class GetUserByIdEndpoint(UserService userService) : Endpoint<GetUserByIdDTO, GetUserByIdResponseDTO>
+public class GetUserByIdEndpoint : Endpoint<GetUserByIdRequestDTO, GetUserByIdResponseDTO>
 {
-    private readonly UserService _userService = userService;
+    private readonly UserManager<User> _userManager;
+    private readonly ILogger<GetUserByIdEndpoint> _logger;
+
+    public GetUserByIdEndpoint(UserManager<User> userManager, ILogger<GetUserByIdEndpoint> logger)
+    {
+        _userManager = userManager;
+        _logger = logger;
+    }
 
     public override void Configure()
     {
-        Get("/api/user/{id}");
+        Get("/api/user/{@userId}", r => new { r.Id });
+
+        Description(b => b.Produces(403));
+        Summary(s =>
+        {
+            s.Summary = "Retrieve a user by their ID";
+            s.Description = "The endpoint retrieves a user by their ID.";
+            s.ExampleRequest = "example_id_123";
+            s.ResponseExamples[200] = new GetUserByIdResponseDTO
+            {
+                Id = "example_id_123",
+                Email = "john.doe@domain.tld"
+            };
+        });
     }
 
-    public override async Task HandleAsync(GetUserByIdDTO request, CancellationToken ct)
+
+    public override async Task HandleAsync(GetUserByIdRequestDTO res, CancellationToken ct)
     {
-        User user = await _userService.GetUserByIdAsync(request.Id);
+        var user = await _userManager.FindByIdAsync(res.Id);
 
         if (user == null)
         {
             AddError("User not found");
+            await SendErrorsAsync(StatusCodes.Status404NotFound, ct);
+            return;
+        }
 
-            await SendErrorsAsync(StatusCodes.Status404NotFound, ct); // Not Found
-        }
-        else
+        var response = new GetUserByIdResponseDTO
         {
-            await SendAsync(new GetUserByIdResponseDTO
-            {
-                Id = user.Id,
-                Name = user.Username,
-                Email = user.Email
-            }, StatusCodes.Status200OK, ct); // OK
-        }
+            Id = user.Id,
+            Email = user.Email
+        };
+
+        await SendAsync(response, StatusCodes.Status200OK, ct);
     }
 }
-*/
