@@ -8,6 +8,7 @@ using FastEndpoints.Swagger;
 using TodoApp.Core.Entities;
 using Microsoft.AspNetCore.Identity;
 using TodoApp.UseCases;
+using TodoApp.Infrastructure;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -25,30 +26,18 @@ builder.Services
 builder.Services.AddDataProtection();
 builder.Services.AddControllers(); // Adds services for controllers (API)
 
-builder.Services.AddDbContext<ApplicationDbContext>(options =>
-    options.UseSqlite(builder.Configuration.GetConnectionString("DefaultConnection")));
-
-builder.Services.AddIdentityCore<User>(options =>
-{
-    options.Password.RequireDigit = false;
-    options.Password.RequireLowercase = false;
-    options.Password.RequireNonAlphanumeric = false;
-    options.Password.RequireUppercase = false;
-    options.Password.RequiredLength = 6;
-})
-.AddEntityFrameworkStores<ApplicationDbContext>()
-.AddApiEndpoints(); // Add API endpoints for User
+// Dependency injection for infrastructure, Register infrastructure services
+builder.Services.AddInfrastructure(builder.Configuration);
 
 // Register repository implementation
 builder.Services.AddScoped<ITodoItemRepository, TodoItemRepository>();
-builder.Services.AddScoped<TodoItemService>(); // Register TodoItemService
+
+// Dependency injection for use cases
+builder.Services.AddUseCases(); // Register use cases
 
 // Register Swagger services
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen(); // Adds Swagger generation services for FastEndpoints
-
-// Dependency injection for use cases
-builder.Services.AddUseCases(); // Register use cases
 
 var app = builder.Build();
 

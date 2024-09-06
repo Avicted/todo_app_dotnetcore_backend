@@ -10,6 +10,7 @@ public class TodoItemMapping : Profile
     {
         // Create
         CreateMap<TodoItem, CreateTodoItemDTO>();
+        CreateMap<TodoItem, CreateTodoItemResponseDTO>();
         CreateMap<CreateTodoItemDTO, TodoItem>();
         CreateMap<CreateTodoItemDTO, CreateTodoItemResponseDTO>();
         CreateMap<CreateTodoItemResponseDTO, CreateTodoItemDTO>();
