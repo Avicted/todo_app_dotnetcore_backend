@@ -18,13 +18,10 @@ public class TodoItemRepository : ITodoItemRepository
         _mapper = mapper;
     }
 
-    public async Task<GetTodoItemByIdResponseDTO?> GetByIdAsync(GetTodoItemByIdDTO item)
+    public async Task<GetTodoItemByIdResponseDTO?> GetByIdAsync(string userId, int todoItemId)
     {
-        var todoItem = await _context.TodoItems.FindAsync(item.Id);
-        if (todoItem == null)
-        {
-            return null;
-        }
+        // Return the TodoItem that belongs to the user ONLY! use the request.UserId to filter the TodoItem
+        var todoItem = await _context.TodoItems.FirstOrDefaultAsync(x => x.UserId == userId && x.Id == todoItemId);
 
         return _mapper.Map<GetTodoItemByIdResponseDTO>(todoItem);
     }

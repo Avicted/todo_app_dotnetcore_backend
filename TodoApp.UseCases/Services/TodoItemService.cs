@@ -23,9 +23,9 @@ public class TodoItemService
         return _mapper.Map<IEnumerable<GetTodoItemByIdResponseDTO>>(await _todoItemRepository.GetAllAsync(userId));
     }
 
-    public async Task<GetTodoItemByIdResponseDTO?> GetTodoItemByIdAsync(GetTodoItemByIdDTO todoItem)
+    public async Task<GetTodoItemByIdResponseDTO?> GetTodoItemByIdAsync(string userId, int todoItemId)
     {
-        return await _todoItemRepository.GetByIdAsync(todoItem);
+        return await _todoItemRepository.GetByIdAsync(userId, todoItemId);
     }
 
     public async Task<CreateTodoItemResponseDTO> AddTodoItemAsync(CreateTodoItemDTO todoItem)

@@ -17,7 +17,7 @@ public class DeleteTodoItemEndpoint : Endpoint<DeleteTodoItemDTO, DeleteTodoItem
 
     public override void Configure()
     {
-        Delete("api/todoitems/{Id}");
+        Delete("api/todos/{Id}");
         // AllowAnonymous();
 
         // Document in Swagger that this endpoint returns only the UserName and id

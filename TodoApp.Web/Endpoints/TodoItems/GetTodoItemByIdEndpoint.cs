@@ -1,3 +1,4 @@
+using System.Security.Claims;
 using FastEndpoints;
 using TodoApp.UseCases.DTOs;
 using TodoApp.UseCases.Interfaces;
@@ -17,7 +18,7 @@ public class GetTodoItemByIdEndpoint : Endpoint<GetTodoItemByIdDTO, GetTodoItemB
 
     public override void Configure()
     {
-        Get("/api/todo/{@id}", r => new { r.Id });
+        Get("/api/todos/{@id}", r => new { r.Id });
 
         Description(b => b.Produces(403));
         Summary(s =>
@@ -40,7 +41,16 @@ public class GetTodoItemByIdEndpoint : Endpoint<GetTodoItemByIdDTO, GetTodoItemB
 
     public override async Task HandleAsync(GetTodoItemByIdDTO req, CancellationToken ct)
     {
-        var todoItem = await _todoItemRepository.GetByIdAsync(req);
+        var userId = HttpContext.User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+
+        if (userId == null)
+        {
+            AddError("Unauthorized");
+            await SendErrorsAsync(StatusCodes.Status401Unauthorized, ct);
+            return;
+        }
+
+        var todoItem = await _todoItemRepository.GetByIdAsync(userId, req.Id);
 
         if (todoItem == null)
         {

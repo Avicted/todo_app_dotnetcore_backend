@@ -24,7 +24,7 @@ public class CreateTodoItemEndpoint : Endpoint<CreateTodoItemDTO, CreateTodoItem
 
     public override void Configure()
     {
-        Post("/api/todo");
+        Post("/api/todos");
         // AllowAnonymous();
 
         // Document in Swagger that this endpoint returns only the UserName and id

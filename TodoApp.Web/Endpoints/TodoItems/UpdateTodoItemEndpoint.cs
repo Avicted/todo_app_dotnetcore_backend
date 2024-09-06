@@ -25,7 +25,7 @@ public class UpdateTodoItemEndpoint : Endpoint<UpdateTodoItemDTO, UpdateTodoItem
 
     public override void Configure()
     {
-        Put("/api/todo/{@id}", r => new { r.Id });
+        Put("/api/todos/{@id}", r => new { r.Id });
 
         // AllowAnonymous();
 
@@ -68,7 +68,7 @@ public class UpdateTodoItemEndpoint : Endpoint<UpdateTodoItemDTO, UpdateTodoItem
 
         // Get the TodoItem by the ID
         var todoItemDTO = new GetTodoItemByIdDTO { Id = request.Id };
-        var todoItem = await _todoItemService.GetTodoItemByIdAsync(todoItemDTO);
+        var todoItem = await _todoItemService.GetTodoItemByIdAsync(user.Id, todoItemDTO.Id);
 
         _logger.LogInformation("TodoItem found: {0}", todoItem?.Id);
 
