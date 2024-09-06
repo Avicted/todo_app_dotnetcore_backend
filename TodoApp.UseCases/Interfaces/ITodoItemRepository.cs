@@ -9,7 +9,7 @@ namespace TodoApp.UseCases.Interfaces;
 
 public interface ITodoItemRepository
 {
-    Task<IEnumerable<TodoItem>> GetAllAsync();
+    Task<IEnumerable<TodoItem>> GetAllAsync(GetAllTodoItemsDTO item);
     Task<GetTodoItemByIdResponseDTO?> GetByIdAsync(GetTodoItemByIdDTO item);
     Task<CreateTodoItemResponseDTO> AddAsync(CreateTodoItemDTO item);
     Task<UpdateTodoItemResponseDTO?> UpdateAsync(UpdateTodoItemDTO item);

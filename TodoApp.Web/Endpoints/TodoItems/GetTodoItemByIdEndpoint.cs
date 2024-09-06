@@ -1,7 +1,5 @@
 using FastEndpoints;
 using TodoApp.UseCases.DTOs;
-using TodoApp.Core.Entities;
-using Microsoft.AspNetCore.Identity;
 using TodoApp.UseCases.Interfaces;
 
 namespace TodoApp.Web.Endpoints.TodoItems;
