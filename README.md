@@ -1,6 +1,7 @@
 # Dotnet Core minimal Clean Architecture
 
 # Work in progress!
+- Tests missing
 
 ### Initial setup, already done
 ```bash
