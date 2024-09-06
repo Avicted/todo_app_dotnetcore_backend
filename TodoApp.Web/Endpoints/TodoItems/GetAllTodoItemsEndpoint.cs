@@ -51,7 +51,14 @@ public class GetAllTodoItemsEndpoint : Endpoint<GetAllTodoItemsDTO, GetAllTodoIt
         _logger.LogInformation("Retrieving all todo items");
         _logger.LogInformation($"User ID: {userId}");
 
-        var todoItemsDto = await _todoItemRepository.GetAllAsync(req);
+        if (userId == null)
+        {
+            AddError("Unauthorized");
+            await SendErrorsAsync(StatusCodes.Status401Unauthorized, ct);
+            return;
+        }
+
+        var todoItemsDto = await _todoItemRepository.GetAllAsync(userId);
 
         if (todoItemsDto == null || !todoItemsDto.Any())
         {

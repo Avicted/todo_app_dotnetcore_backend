@@ -29,10 +29,9 @@ public class TodoItemRepository : ITodoItemRepository
         return _mapper.Map<GetTodoItemByIdResponseDTO>(todoItem);
     }
 
-    public async Task<IEnumerable<TodoItem>> GetAllAsync(GetAllTodoItemsDTO request)
+    public async Task<IEnumerable<TodoItem>> GetAllAsync(string UserId)
     {
         // Return all TodoItems that belong to the user ONLY! use the request.UserId to filter the TodoItems
-        var UserId = request.UserId;
         var todoItems = await _context.TodoItems.Where(x => x.UserId == UserId).ToArrayAsync();
 
         return todoItems;
