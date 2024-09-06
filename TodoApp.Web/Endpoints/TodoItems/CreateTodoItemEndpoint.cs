@@ -36,9 +36,6 @@ public class CreateTodoItemEndpoint : Endpoint<CreateTodoItemDTO, CreateTodoItem
             s.ExampleRequest = new TodoItem { Title = "example title", Description = "example description", IsCompleted = false };
             s.ResponseExamples[200] = new CreateTodoItemResponseDTO { Id = 1, Title = "example title", Description = "example description", IsCompleted = false, UserId = "example" };
         });
-
-        // Only show Title, Description, and IsCompleted in the request body
-
     }
 
     public override async Task HandleAsync(CreateTodoItemDTO request, CancellationToken ct)
