@@ -7,6 +7,7 @@ using FastEndpoints;
 using FastEndpoints.Swagger;
 using TodoApp.Core.Entities;
 using Microsoft.AspNetCore.Identity;
+using TodoApp.UseCases;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -45,6 +46,9 @@ builder.Services.AddScoped<TodoItemService>(); // Register TodoItemService
 // Register Swagger services
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen(); // Adds Swagger generation services for FastEndpoints
+
+// Dependency injection for use cases
+builder.Services.AddUseCases(); // Register use cases
 
 var app = builder.Build();
 

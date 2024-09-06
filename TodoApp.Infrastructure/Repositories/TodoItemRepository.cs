@@ -1,3 +1,4 @@
+using AutoMapper;
 using Microsoft.EntityFrameworkCore;
 using TodoApp.Core.Entities;
 using TodoApp.Infrastructure.Persistense;
@@ -9,10 +10,12 @@ namespace TodoApp.Infrastructure.Repositories;
 public class TodoItemRepository : ITodoItemRepository
 {
     private readonly ApplicationDbContext _context;
+    private readonly IMapper _mapper;
 
-    public TodoItemRepository(ApplicationDbContext context)
+    public TodoItemRepository(ApplicationDbContext context, IMapper mapper)
     {
         _context = context;
+        _mapper = mapper;
     }
 
     public async Task<TodoItem?> GetByIdAsync(int id)
@@ -25,24 +28,33 @@ public class TodoItemRepository : ITodoItemRepository
         return await _context.TodoItems.ToListAsync();
     }
 
-    public async Task<CreateTodoItemResponseDTO> AddAsync(TodoItem item)
+    public async Task<CreateTodoItemResponseDTO> AddAsync(CreateTodoItemDTO item)
     {
-        await _context.TodoItems.AddAsync(item);
+        var todoItem = _mapper.Map<TodoItem>(item);
+
+        _context.TodoItems.Add(todoItem);
         await _context.SaveChangesAsync();
 
-        return new CreateTodoItemResponseDTO
-        {
-            Id = item.Id,
-            Title = item.Title,
-            Description = item.Description,
-            IsCompleted = item.IsCompleted
-        };
+        return _mapper.Map<CreateTodoItemResponseDTO>(todoItem);
     }
 
-    public async Task UpdateAsync(TodoItem item)
+    public async Task<UpdateTodoItemResponseDTO?> UpdateAsync(UpdateTodoItemDTO item)
     {
-        _context.TodoItems.Update(item);
+        var todoItem = await _context.TodoItems.FindAsync(item.Id);
+        if (todoItem == null)
+        {
+            return null;
+        }
+
+        // Update the properties of the TodoItem entity
+        todoItem.Title = item.Title;
+        todoItem.Description = item.Description;
+        todoItem.IsCompleted = item.IsCompleted;
+
+        // Save the changes to the database
         await _context.SaveChangesAsync();
+
+        return _mapper.Map<UpdateTodoItemResponseDTO>(item);
     }
 
     public async Task DeleteAsync(int id)

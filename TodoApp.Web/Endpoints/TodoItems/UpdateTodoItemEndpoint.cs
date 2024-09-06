@@ -1,5 +1,4 @@
 using FastEndpoints;
-using FastEndpoints.Swagger; // Add this using directive
 using TodoApp.UseCases.DTOs;
 using TodoApp.UseCases.Services;
 using System.Security.Claims;
@@ -9,15 +8,15 @@ using Microsoft.AspNetCore.Identity;
 
 namespace TodoApp.Web.Endpoints.TodoItems;
 
-public class CreateTodoItemEndpoint : Endpoint<CreateTodoItemDTO, CreateTodoItemResponseDTO>
+public class UpdateTodoItemEndpoint : Endpoint<UpdateTodoItemDTO, UpdateTodoItemResponseDTO>
 {
     private readonly TodoItemService _todoItemService;
-    private readonly ILogger<CreateTodoItemEndpoint> _logger;
+    private readonly ILogger<UpdateTodoItemEndpoint> _logger;
 
     private readonly UserManager<User> _userManager;
 
     // Inject the logger via the constructor
-    public CreateTodoItemEndpoint(TodoItemService todoItemService, ILogger<CreateTodoItemEndpoint> logger, UserManager<User> userManager)
+    public UpdateTodoItemEndpoint(TodoItemService todoItemService, ILogger<UpdateTodoItemEndpoint> logger, UserManager<User> userManager)
     {
         _todoItemService = todoItemService;
         _logger = logger;
@@ -26,24 +25,22 @@ public class CreateTodoItemEndpoint : Endpoint<CreateTodoItemDTO, CreateTodoItem
 
     public override void Configure()
     {
-        Post("/api/todo");
+        Put("/api/todo/{@id}", r => new { r.Id });
+
         // AllowAnonymous();
 
         // Document in Swagger that this endpoint returns only the UserName and id
         Description(b => b.Produces(403));
         Summary(s =>
         {
-            s.Summary = "Create a new TodoItem";
-            s.Description = "The endpoint creates a new TodoItem for the authenticated user.";
+            s.Summary = "Update a new TodoItem";
+            s.Description = "The endpoint Updates a new TodoItem for the authenticated user.";
             s.ExampleRequest = new TodoItem { Title = "example title", Description = "example description", IsCompleted = false };
-            s.ResponseExamples[200] = new CreateTodoItemResponseDTO { Id = 1, Title = "example title", Description = "example description", IsCompleted = false, UserId = "example" };
+            s.ResponseExamples[200] = new UpdateTodoItemResponseDTO { Id = 1, Title = "example title", Description = "example description", IsCompleted = false, UserId = "example" };
         });
-
-        // Only show Title, Description, and IsCompleted in the request body
-
     }
 
-    public override async Task HandleAsync(CreateTodoItemDTO request, CancellationToken ct)
+    public override async Task HandleAsync(UpdateTodoItemDTO request, CancellationToken ct)
     {
         // Get the user's email from the claims
         var email = HttpContext.User.FindFirst(ClaimTypes.Email)?.Value;
@@ -69,39 +66,41 @@ public class CreateTodoItemEndpoint : Endpoint<CreateTodoItemDTO, CreateTodoItem
             return;
         }
 
-        // Create a new TodoItem
-        var todoItem = new CreateTodoItemDTO
+        // Get the TodoItem by the ID
+        var todoItem = await _todoItemService.GetTodoItemByIdAsync(request.Id);
+
+        _logger.LogInformation("TodoItem found: {0}", todoItem?.Id);
+
+        if (todoItem == null)
         {
+            AddError("TodoItem not found");
+            await SendErrorsAsync(StatusCodes.Status404NotFound, ct);
+            return;
+        }
+
+        // Update a the TodoItem
+        var updatedTodoItem = new UpdateTodoItemDTO
+        {
+            Id = todoItem.Id,
             Title = request.Title,
             Description = request.Description,
             IsCompleted = request.IsCompleted,
-            UserId = user.Id
         };
 
-        // Add the TodoItem
-        var res = await _todoItemService.AddTodoItemAsync(todoItem);
+        // Update the TodoItem
+        UpdateTodoItemResponseDTO updatedTodoItemRes = await _todoItemService.UpdateTodoItemAsync(updatedTodoItem);
 
-        // If the TodoItem is not added, return a 400
-        if (res == null)
+        // Log the TodoItem creation
+        _logger.LogInformation("TodoItem Updated: {0}", updatedTodoItemRes.Id);
+
+        if (updatedTodoItemRes == null)
         {
-            AddError("TodoItem not added");
+            AddError("TodoItem not updated");
             await SendErrorsAsync(StatusCodes.Status400BadRequest, ct);
             return;
         }
 
-        // Log the TodoItem creation
-        _logger.LogInformation("TodoItem created: {0}", res.Id);
-
-        var response = new CreateTodoItemResponseDTO
-        {
-            Id = res.Id,
-            Title = res.Title,
-            Description = res.Description,
-            IsCompleted = res.IsCompleted,
-            UserId = user.Id
-        };
-
         // Return the TodoItem
-        await SendAsync(response, StatusCodes.Status201Created, ct);
+        await SendAsync(updatedTodoItemRes, StatusCodes.Status200OK, ct);
     }
 }
