@@ -18,7 +18,7 @@ public class GetUserByIdEndpoint : Endpoint<GetUserByIdRequestDTO, GetUserByIdRe
 
     public override void Configure()
     {
-        Get("/api/user/{@userId}", r => new { r.Id });
+        Get("/api/users/{@userId}", r => new { r.Id });
 
         Description(b => b.Produces(403));
         Summary(s =>
