@@ -1,9 +1,10 @@
 using Microsoft.EntityFrameworkCore;
 using TodoApp.Core.Entities;
+using TodoApp.Infrastructure.Persistense;
 using TodoApp.UseCases.DTOs;
 using TodoApp.UseCases.Interfaces;
 
-namespace TodoApp.Infrastructure.Data.Repositories;
+namespace TodoApp.Infrastructure.Repositories;
 
 public class TodoItemRepository : ITodoItemRepository
 {
@@ -14,7 +15,7 @@ public class TodoItemRepository : ITodoItemRepository
         _context = context;
     }
 
-    public async Task<TodoItem> GetByIdAsync(int id)
+    public async Task<TodoItem?> GetByIdAsync(int id)
     {
         return await _context.TodoItems.FindAsync(id);
     }

@@ -1,8 +1,9 @@
+using System.Reflection;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using TodoApp.Core.Entities;
 
-namespace TodoApp.Infrastructure.Data;
+namespace TodoApp.Infrastructure.Persistense;
 
 public class ApplicationDbContext : IdentityDbContext<User>
 {
@@ -15,15 +16,10 @@ public class ApplicationDbContext : IdentityDbContext<User>
     }
 
     // Configure entity relationships and constraints
-    protected override void OnModelCreating(ModelBuilder modelBuilder)
+    protected override void OnModelCreating(ModelBuilder builder)
     {
-        base.OnModelCreating(modelBuilder);
+        builder.ApplyConfigurationsFromAssembly(Assembly.GetExecutingAssembly());
 
-        // Configure User-TodoItem relationship
-        modelBuilder.Entity<User>()
-            .HasMany(u => u.TodoItems)
-            .WithOne(t => t.User)
-            .HasForeignKey(t => t.UserId)
-            .OnDelete(DeleteBehavior.Cascade);
+        base.OnModelCreating(builder);
     }
 }

@@ -3,7 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
-using TodoApp.Infrastructure.Data;
+using TodoApp.Infrastructure.Persistense;
 
 #nullable disable
 
