@@ -1,8 +1,6 @@
-using Microsoft.EntityFrameworkCore;
 using TodoApp.UseCases.Interfaces;
 using TodoApp.Infrastructure.Persistense;
 using TodoApp.Infrastructure.Repositories;
-using TodoApp.UseCases.Services;
 using FastEndpoints;
 using FastEndpoints.Swagger;
 using TodoApp.Core.Entities;
@@ -11,6 +9,17 @@ using TodoApp.UseCases;
 using TodoApp.Infrastructure;
 
 var builder = WebApplication.CreateBuilder(args);
+
+var AllowSpecificOrigins = "_AllowSpecificOrigins";
+
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy(name: AllowSpecificOrigins,
+    policy =>
+    {
+        policy.WithOrigins("http://localhost");
+    });
+});
 
 builder.Services.
   AddFastEndpoints().
@@ -46,11 +55,12 @@ if (app.Environment.IsDevelopment())
     app.UseDeveloperExceptionPage();
 }
 
-app.UseHttpsRedirection();
-app.UseStaticFiles();
+// app.UseHttpsRedirection();
+// app.UseStaticFiles();
 
 app.UseRouting();
 
+app.UseCors(AllowSpecificOrigins);
 app.UseAuthentication(); // Ensure authentication is used
 app.UseAuthorization();  // Ensure authorization is used
 
