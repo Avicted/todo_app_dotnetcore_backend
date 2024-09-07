@@ -43,8 +43,22 @@ public class DeleteTodoItemEndpoint : Endpoint<DeleteTodoItemDTO, DeleteTodoItem
         _logger.LogInformation("Retrieving all todo items");
         _logger.LogInformation($"User userEmail: {userEmail}");
 
+        if (userEmail == null)
+        {
+            AddError("Unauthorized");
+            await SendErrorsAsync(StatusCodes.Status401Unauthorized, cancellationToken);
+            return null!;
+        }
+
 
         var user = await _userManager.FindByEmailAsync(userEmail);
+        if (user == null)
+        {
+            AddError("Unauthorized");
+            await SendErrorsAsync(StatusCodes.Status401Unauthorized, cancellationToken);
+            return null!;
+        }
+
         var userId = await _userManager.GetUserIdAsync(user);
 
         if (userId == null)

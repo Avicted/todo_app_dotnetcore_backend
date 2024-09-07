@@ -55,6 +55,14 @@ public class UpdateTodoItemEndpoint : Endpoint<UpdateTodoItemDTO, UpdateTodoItem
 
         // Get the user from the email
         var user = await _userManager.FindByEmailAsync(email);
+
+        if (user == null)
+        {
+            AddError("Unauthorized");
+            await SendErrorsAsync(StatusCodes.Status401Unauthorized, ct);
+            return;
+        }
+
         var userId = await _userManager.GetUserIdAsync(user);
 
         _logger.LogInformation("User found: {0}", user?.Id);
@@ -62,8 +70,8 @@ public class UpdateTodoItemEndpoint : Endpoint<UpdateTodoItemDTO, UpdateTodoItem
         // If the user is not found, return a 404
         if (user == null)
         {
-            AddError("User not found");
-            await SendErrorsAsync(StatusCodes.Status404NotFound, ct);
+            AddError("Unauthorized");
+            await SendErrorsAsync(StatusCodes.Status401Unauthorized, ct);
             return;
         }
 

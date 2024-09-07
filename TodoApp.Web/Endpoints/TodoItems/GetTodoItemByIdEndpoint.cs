@@ -51,8 +51,22 @@ public class GetTodoItemByIdEndpoint : Endpoint<GetTodoItemByIdDTO, GetTodoItemB
         _logger.LogInformation("Retrieving todo item by ID");
         _logger.LogInformation($"User userEmail: {userEmail}");
 
+        if (userEmail == null)
+        {
+            AddError("Unauthorized");
+            await SendErrorsAsync(StatusCodes.Status401Unauthorized, ct);
+            return;
+        }
 
         var user = await _userManager.FindByEmailAsync(userEmail);
+
+        if (user == null)
+        {
+            AddError("Unauthorized");
+            await SendErrorsAsync(StatusCodes.Status401Unauthorized, ct);
+            return;
+        }
+
         var userId = await _userManager.GetUserIdAsync(user);
 
         if (userId == null)

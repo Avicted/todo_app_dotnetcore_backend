@@ -61,3 +61,12 @@ Open the swagger page:
 
 # Swagger
 ![Swagger page](swagger.png "Swagger page")
+
+
+# Deal with Warnings
+```bash
+dotnet list package --outdated
+
+# Update packages
+dotnet add package [PackageName] --version [LatestVersion]
+```

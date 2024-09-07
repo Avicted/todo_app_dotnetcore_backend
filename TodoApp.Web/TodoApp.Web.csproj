@@ -27,4 +27,9 @@
     <ProjectReference Include="..\TodoApp.Core\TodoApp.Core.csproj" />
     <ProjectReference Include="..\TodoApp.Infrastructure\TodoApp.Infrastructure.csproj" />
   </ItemGroup>
+
+  <PropertyGroup>
+    <NoWarn>NETSDK1188</NoWarn>
+  </PropertyGroup>
+
 </Project>

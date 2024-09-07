@@ -10,7 +10,7 @@
     <PackageReference Include="Microsoft.AspNetCore.Identity" Version="2.2.0" />
     <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="8.0.8" />
     <PackageReference Include="Microsoft.EntityFrameworkCore" Version="8.0.8" />
-    <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="8.0.0">
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="8.0.8">
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
       <PrivateAssets>all</PrivateAssets>
     </PackageReference>
@@ -21,5 +21,9 @@
     <ProjectReference Include="..\TodoApp.Core\TodoApp.Core.csproj" />
     <ProjectReference Include="..\TodoApp.UseCases\TodoApp.UseCases.csproj" />
   </ItemGroup>
+
+    <PropertyGroup>
+    <NoWarn>NETSDK1188</NoWarn>
+  </PropertyGroup>
 
 </Project>
