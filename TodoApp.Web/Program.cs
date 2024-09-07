@@ -7,8 +7,18 @@ using TodoApp.Core.Entities;
 using Microsoft.AspNetCore.Identity;
 using TodoApp.UseCases;
 using TodoApp.Infrastructure;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.IdentityModel.Tokens;
+using System.Text;
+using TodoApp.Web.Endpoints.Authentication;
 
 var builder = WebApplication.CreateBuilder(args);
+
+// Configure logging
+builder.Logging.ClearProviders();
+builder.Logging.AddConsole();
+builder.Logging.AddDebug();
+
 
 var AllowSpecificOrigins = "_AllowSpecificOrigins";
 
@@ -35,6 +45,27 @@ builder.Services
     .AddEntityFrameworkStores<ApplicationDbContext>();
 
 builder.Services.AddDataProtection();
+
+builder.Services.AddAuthentication(options =>
+{
+    options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+    options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+})
+.AddJwtBearer(options =>
+{
+    options.TokenValidationParameters = new TokenValidationParameters
+    {
+        ValidateIssuer = true,
+        ValidateAudience = true,
+        ValidateLifetime = true,
+        ValidateIssuerSigningKey = true,
+        ValidIssuer = builder.Configuration["Jwt:Issuer"],
+        ValidAudience = builder.Configuration["Jwt:Audience"],
+        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["Jwt:SigningKey"]))
+    };
+});
+
+
 builder.Services.AddControllers(); // Adds services for controllers (API)
 
 // Dependency injection for infrastructure, Register infrastructure services
@@ -52,6 +83,7 @@ builder.Services.AddSwaggerGen(); // Adds Swagger generation services for FastEn
 
 var app = builder.Build();
 
+// Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
     app.UseDeveloperExceptionPage();
@@ -66,7 +98,9 @@ app.UseCors(AllowSpecificOrigins);
 app.UseAuthentication(); // Ensure authentication is used
 app.UseAuthorization();  // Ensure authorization is used
 
-app.MapGroup("/api").WithTags("Security").MapIdentityApi<User>();
+app.MapGroup("/api")
+    .WithTags("Security")
+    .MapIdentityApi<User>();
 
 app.UseFastEndpoints()
     .UseSwaggerGen();
