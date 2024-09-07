@@ -5,7 +5,6 @@ using TodoApp.Core.Entities;
 using TodoApp.Infrastructure.Persistense;
 using TodoApp.UseCases.DTOs;
 using TodoApp.UseCases.Interfaces;
-using TodoApp.Core.Enums;
 
 namespace TodoApp.Infrastructure.Repositories;
 

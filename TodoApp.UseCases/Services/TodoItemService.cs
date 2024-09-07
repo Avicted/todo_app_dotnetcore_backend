@@ -22,7 +22,7 @@ public class TodoItemService
         return _mapper.Map<IEnumerable<GetTodoItemByIdResponseDTO>>(await _todoItemRepository.GetAllAsync(userId));
     }
 
-    public async Task<GetTodoItemByIdResponseDTO?> GetTodoItemByIdAsync(string userId, int todoItemId)
+    public async Task<GetTodoItemByIdResponseDTO> GetTodoItemByIdAsync(string userId, int todoItemId)
     {
         return await _todoItemRepository.GetByIdAsync(userId, todoItemId);
     }
