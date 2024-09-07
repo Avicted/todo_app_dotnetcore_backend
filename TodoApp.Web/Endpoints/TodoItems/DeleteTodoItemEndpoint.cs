@@ -1,4 +1,7 @@
+using System.Security.Claims;
 using FastEndpoints;
+using Microsoft.AspNetCore.Identity;
+using TodoApp.Core.Entities;
 using TodoApp.UseCases.DTOs;
 using TodoApp.UseCases.Interfaces;
 
@@ -8,11 +11,13 @@ public class DeleteTodoItemEndpoint : Endpoint<DeleteTodoItemDTO, DeleteTodoItem
 {
     private readonly ITodoItemRepository _repository;
     private readonly ILogger<DeleteTodoItemEndpoint> _logger;
+    private readonly UserManager<User> _userManager;
 
-    public DeleteTodoItemEndpoint(ITodoItemRepository repository, ILogger<DeleteTodoItemEndpoint> logger)
+    public DeleteTodoItemEndpoint(ITodoItemRepository repository, ILogger<DeleteTodoItemEndpoint> logger, UserManager<User> userManager)
     {
         _repository = repository;
         _logger = logger;
+        _userManager = userManager;
     }
 
     public override void Configure()
@@ -33,7 +38,23 @@ public class DeleteTodoItemEndpoint : Endpoint<DeleteTodoItemDTO, DeleteTodoItem
 
     public override async Task<DeleteTodoItemResponseDTO> HandleAsync(DeleteTodoItemDTO request, CancellationToken cancellationToken)
     {
-        var response = await _repository.DeleteAsync(request);
+        var userEmail = HttpContext.User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+
+        _logger.LogInformation("Retrieving all todo items");
+        _logger.LogInformation($"User userEmail: {userEmail}");
+
+
+        var user = await _userManager.FindByEmailAsync(userEmail);
+        var userId = await _userManager.GetUserIdAsync(user);
+
+        if (userId == null)
+        {
+            AddError("Unauthorized");
+            await SendErrorsAsync(StatusCodes.Status401Unauthorized, cancellationToken);
+            return null!;
+        }
+
+        var response = await _repository.DeleteAsync(userId, request);
 
         if (response == null)
         {

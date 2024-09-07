@@ -32,14 +32,13 @@ public class TodoItemService
         return await _todoItemRepository.AddAsync(todoItem);
     }
 
-    public async Task<UpdateTodoItemResponseDTO> UpdateTodoItemAsync(UpdateTodoItemDTO todoItem)
+    public async Task<UpdateTodoItemResponseDTO> UpdateTodoItemAsync(string userId, UpdateTodoItemDTO todoItem)
     {
-        return _mapper.Map<UpdateTodoItemResponseDTO>(await _todoItemRepository.UpdateAsync(todoItem));
+        return _mapper.Map<UpdateTodoItemResponseDTO>(await _todoItemRepository.UpdateAsync(userId, todoItem));
     }
 
-    public async Task<DeleteTodoItemResponseDTO> DeleteTodoItemAsync(DeleteTodoItemDTO todoItem)
+    public async Task<DeleteTodoItemResponseDTO> DeleteTodoItemAsync(string userId, DeleteTodoItemDTO todoItem)
     {
-        return _mapper.Map<DeleteTodoItemResponseDTO>(await _todoItemRepository.DeleteAsync(todoItem));
+        return _mapper.Map<DeleteTodoItemResponseDTO>(await _todoItemRepository.DeleteAsync(userId, todoItem));
     }
-
 }

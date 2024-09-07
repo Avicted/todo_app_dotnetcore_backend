@@ -4,6 +4,7 @@ using TodoApp.UseCases.Services;
 using System.Security.Claims;
 using TodoApp.Core.Entities;
 using Microsoft.AspNetCore.Identity;
+using TodoApp.Core.Enums;
 
 namespace TodoApp.Web.Endpoints.TodoItems;
 
@@ -33,8 +34,8 @@ public class CreateTodoItemEndpoint : Endpoint<CreateTodoItemDTO, CreateTodoItem
         {
             s.Summary = "Create a new TodoItem";
             s.Description = "The endpoint creates a new TodoItem for the authenticated user.";
-            s.ExampleRequest = new TodoItem { Title = "example title", Description = "example description", IsCompleted = false };
-            s.ResponseExamples[201] = new CreateTodoItemResponseDTO { Id = 1, Title = "example title", Description = "example description", IsCompleted = false, UserId = "example" };
+            s.ExampleRequest = new TodoItem { Title = "example title", Description = "example description", Status = TodoItemStatus.NotStarted, UserId = "example" };
+            s.ResponseExamples[201] = new CreateTodoItemResponseDTO { Id = 1, Title = "example title", Description = "example description", Status = TodoItemStatus.NotStarted, UserId = "example" };
         });
     }
 
@@ -69,7 +70,7 @@ public class CreateTodoItemEndpoint : Endpoint<CreateTodoItemDTO, CreateTodoItem
         {
             Title = request.Title,
             Description = request.Description,
-            IsCompleted = request.IsCompleted,
+            Status = request.Status,
             UserId = user.Id
         };
 
@@ -92,7 +93,7 @@ public class CreateTodoItemEndpoint : Endpoint<CreateTodoItemDTO, CreateTodoItem
             Id = res.Id,
             Title = res.Title,
             Description = res.Description,
-            IsCompleted = res.IsCompleted,
+            Status = res.Status,
             UserId = user.Id
         };
 

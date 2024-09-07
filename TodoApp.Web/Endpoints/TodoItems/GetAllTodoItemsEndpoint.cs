@@ -2,6 +2,7 @@ using System.Security.Claims;
 using FastEndpoints;
 using Microsoft.AspNetCore.Identity;
 using TodoApp.Core.Entities;
+using TodoApp.Core.Enums;
 using TodoApp.UseCases.DTOs;
 using TodoApp.UseCases.Interfaces;
 
@@ -33,12 +34,21 @@ public class GetAllTodoItemsEndpoint : Endpoint<GetAllTodoItemsDTO, GetAllTodoIt
             {
                 TodoItems =
                 [
-                    new TodoItem
+                    new GetAllTodoItemDTO
                     {
-                        Id = 123,
-                        Title = "Example Todo Item",
-                        Description = "This is an example todo item",
-                        IsCompleted = false
+                        Id = 1,
+                        Title = "Todo Item 1",
+                        Description = "Description of Todo Item 1",
+                        Status = TodoItemStatus.NotStarted,
+                        UserId = "1"
+                    },
+                    new GetAllTodoItemDTO
+                    {
+                        Id = 2,
+                        Title = "Todo Item 2",
+                        Description = "Description of Todo Item 2",
+                        Status = TodoItemStatus.InProgress,
+                        UserId = "1"
                     }
                 ]
             };
@@ -75,12 +85,13 @@ public class GetAllTodoItemsEndpoint : Endpoint<GetAllTodoItemsDTO, GetAllTodoIt
         _logger.LogInformation("Todo items retrieved");
 
         // Map the TodoItem entities to TodoItem DTOs
-        var todoItems = todoItemsDto.Select(x => new TodoItem
+        var todoItems = todoItemsDto.Select(x => new GetAllTodoItemDTO
         {
             Id = x.Id,
             Title = x.Title,
             Description = x.Description,
-            IsCompleted = x.IsCompleted
+            Status = x.Status,
+            UserId = x.UserId
         });
 
         await SendAsync(new GetAllTodoItemsResponseDTO { TodoItems = todoItems }, StatusCodes.Status200OK, ct);

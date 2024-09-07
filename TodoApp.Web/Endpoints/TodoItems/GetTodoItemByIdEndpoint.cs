@@ -1,5 +1,8 @@
 using System.Security.Claims;
 using FastEndpoints;
+using Microsoft.AspNetCore.Identity;
+using TodoApp.Core.Entities;
+using TodoApp.Core.Enums;
 using TodoApp.UseCases.DTOs;
 using TodoApp.UseCases.Interfaces;
 
@@ -9,11 +12,13 @@ public class GetTodoItemByIdEndpoint : Endpoint<GetTodoItemByIdDTO, GetTodoItemB
 {
     private readonly ITodoItemRepository _todoItemRepository;
     private readonly ILogger<GetTodoItemByIdEndpoint> _logger;
+    private readonly UserManager<User> _userManager;
 
-    public GetTodoItemByIdEndpoint(ITodoItemRepository todoItemRepository, ILogger<GetTodoItemByIdEndpoint> logger)
+    public GetTodoItemByIdEndpoint(ITodoItemRepository todoItemRepository, ILogger<GetTodoItemByIdEndpoint> logger, UserManager<User> userManager)
     {
         _todoItemRepository = todoItemRepository;
         _logger = logger;
+        _userManager = userManager;
     }
 
     public override void Configure()
@@ -34,14 +39,21 @@ public class GetTodoItemByIdEndpoint : Endpoint<GetTodoItemByIdDTO, GetTodoItemB
                 Id = 123,
                 Title = "Example Todo Item",
                 Description = "This is an example todo item",
-                IsCompleted = false
+                Status = TodoItemStatus.NotStarted,
             };
         });
     }
 
     public override async Task HandleAsync(GetTodoItemByIdDTO req, CancellationToken ct)
     {
-        var userId = HttpContext.User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+        var userEmail = HttpContext.User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+
+        _logger.LogInformation("Retrieving todo item by ID");
+        _logger.LogInformation($"User userEmail: {userEmail}");
+
+
+        var user = await _userManager.FindByEmailAsync(userEmail);
+        var userId = await _userManager.GetUserIdAsync(user);
 
         if (userId == null)
         {

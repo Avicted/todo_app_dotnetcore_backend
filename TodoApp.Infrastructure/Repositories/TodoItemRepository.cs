@@ -5,6 +5,7 @@ using TodoApp.Core.Entities;
 using TodoApp.Infrastructure.Persistense;
 using TodoApp.UseCases.DTOs;
 using TodoApp.UseCases.Interfaces;
+using TodoApp.Core.Enums;
 
 namespace TodoApp.Infrastructure.Repositories;
 
@@ -29,25 +30,18 @@ public class TodoItemRepository : ITodoItemRepository
         return _mapper.Map<GetTodoItemByIdResponseDTO>(todoItem);
     }
 
-    public async Task<IEnumerable<TodoItem>> GetAllAsync(string UserId)
+    public async Task<IEnumerable<TodoItem>> GetAllAsync(string userId)
     {
-        _logger.LogInformation("Retrieving all todo items");
-        _logger.LogInformation($"User ID: {UserId}");
-
-        if (string.IsNullOrWhiteSpace(UserId))
+        var todoItems = await _context.TodoItems
+        .Where(x => x.UserId == userId)
+        .Select(x => new TodoItem
         {
-            _logger.LogWarning("User ID is null or whitespace.");
-            return Enumerable.Empty<TodoItem>();
-        }
-
-        // Log the SQL query being executed for debugging purposes
-        var sqlQuery = _context.TodoItems.Where(x => x.UserId == UserId).ToQueryString();
-        _logger.LogInformation($"Executing SQL Query: {sqlQuery}");
-
-        // Return all TodoItems that belong to the user ONLY! use the request.UserId to filter the TodoItems
-        var todoItems = await _context.TodoItems.Where(x => x.UserId == UserId).ToArrayAsync();
-
-        _logger.LogInformation($"Retrieved {todoItems.Length} todo items");
+            Title = x.Title,
+            Description = x.Description,
+            Status = x.Status,
+            UserId = x.UserId,
+        })
+        .ToListAsync();
 
         return todoItems;
     }
@@ -62,9 +56,11 @@ public class TodoItemRepository : ITodoItemRepository
         return _mapper.Map<CreateTodoItemResponseDTO>(todoItem);
     }
 
-    public async Task<UpdateTodoItemResponseDTO?> UpdateAsync(UpdateTodoItemDTO item)
+    public async Task<UpdateTodoItemResponseDTO?> UpdateAsync(string userId, UpdateTodoItemDTO item)
     {
-        var todoItem = await _context.TodoItems.FindAsync(item.Id);
+        // Retrieve the TodoItem entity from the database checking that it belongs to the user
+        var todoItem = await _context.TodoItems.FirstOrDefaultAsync(x => x.UserId == userId && x.Id == item.Id);
+
         if (todoItem == null)
         {
             return null;
@@ -73,7 +69,7 @@ public class TodoItemRepository : ITodoItemRepository
         // Update the properties of the TodoItem entity
         todoItem.Title = item.Title;
         todoItem.Description = item.Description;
-        todoItem.IsCompleted = item.IsCompleted;
+        todoItem.Status = item.Status;
 
         // Save the changes to the database
         await _context.SaveChangesAsync();
@@ -81,9 +77,10 @@ public class TodoItemRepository : ITodoItemRepository
         return _mapper.Map<UpdateTodoItemResponseDTO>(item);
     }
 
-    public async Task<DeleteTodoItemResponseDTO?> DeleteAsync(DeleteTodoItemDTO item)
+    public async Task<DeleteTodoItemResponseDTO?> DeleteAsync(string userId, DeleteTodoItemDTO item)
     {
-        var todoItem = await _context.TodoItems.FindAsync(item.Id);
+        var todoItem = await _context.TodoItems.FirstOrDefaultAsync(x => x.UserId == userId && x.Id == item.Id);
+
         if (todoItem == null)
         {
             return null;

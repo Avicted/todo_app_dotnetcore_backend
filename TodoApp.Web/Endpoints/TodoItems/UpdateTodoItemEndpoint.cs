@@ -4,6 +4,7 @@ using TodoApp.UseCases.Services;
 using System.Security.Claims;
 using TodoApp.Core.Entities;
 using Microsoft.AspNetCore.Identity;
+using TodoApp.Core.Enums;
 
 namespace TodoApp.Web.Endpoints.TodoItems;
 
@@ -34,8 +35,8 @@ public class UpdateTodoItemEndpoint : Endpoint<UpdateTodoItemDTO, UpdateTodoItem
         {
             s.Summary = "Update a new TodoItem";
             s.Description = "The endpoint Updates a new TodoItem for the authenticated user.";
-            s.ExampleRequest = new TodoItem { Title = "example title", Description = "example description", IsCompleted = false };
-            s.ResponseExamples[200] = new UpdateTodoItemResponseDTO { Id = 1, Title = "example title", Description = "example description", IsCompleted = false, UserId = "example" };
+            s.ExampleRequest = new TodoItem { Title = "example title", Description = "example description", Status = TodoItemStatus.NotStarted, UserId = "example" };
+            s.ResponseExamples[200] = new UpdateTodoItemResponseDTO { Id = 1, Title = "example title", Description = "example description", Status = TodoItemStatus.NotStarted, UserId = "example" };
         });
     }
 
@@ -54,6 +55,7 @@ public class UpdateTodoItemEndpoint : Endpoint<UpdateTodoItemDTO, UpdateTodoItem
 
         // Get the user from the email
         var user = await _userManager.FindByEmailAsync(email);
+        var userId = await _userManager.GetUserIdAsync(user);
 
         _logger.LogInformation("User found: {0}", user?.Id);
 
@@ -84,11 +86,11 @@ public class UpdateTodoItemEndpoint : Endpoint<UpdateTodoItemDTO, UpdateTodoItem
             Id = todoItem.Id,
             Title = request.Title,
             Description = request.Description,
-            IsCompleted = request.IsCompleted,
+            Status = request.Status
         };
 
         // Update the TodoItem
-        UpdateTodoItemResponseDTO updatedTodoItemRes = await _todoItemService.UpdateTodoItemAsync(updatedTodoItem);
+        UpdateTodoItemResponseDTO updatedTodoItemRes = await _todoItemService.UpdateTodoItemAsync(userId, updatedTodoItem);
 
         // Log the TodoItem creation
         _logger.LogInformation("TodoItem Updated: {0}", updatedTodoItemRes.Id);
