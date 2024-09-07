@@ -90,6 +90,14 @@ public class GetAllTodoItemsEndpoint : Endpoint<GetAllTodoItemsDTO, GetAllTodoIt
 
         var todoItemsDto = await _todoItemRepository.GetAllAsync(userId);
 
+        _logger.LogInformation($"Todo items retrieved: {todoItemsDto.Count()}");
+
+        if (todoItemsDto.Count() > 1)
+        {
+            _logger.LogInformation($"Todo item 1: {todoItemsDto.First().Id}");
+            _logger.LogInformation($"Todo item 2: {todoItemsDto.Last().Id}");
+        }
+
         if (todoItemsDto == null || !todoItemsDto.Any())
         {
             AddError("No todo items found for the user");

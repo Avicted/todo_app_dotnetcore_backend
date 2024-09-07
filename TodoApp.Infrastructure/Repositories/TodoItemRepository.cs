@@ -35,6 +35,7 @@ public class TodoItemRepository : ITodoItemRepository
         .Where(x => x.UserId == userId)
         .Select(x => new TodoItem
         {
+            Id = x.Id,
             Title = x.Title,
             Description = x.Description,
             Status = x.Status,
