@@ -1,22 +1,23 @@
 using System.Security.Claims;
 using FastEndpoints;
+using Microsoft.AspNetCore.Identity;
 using TodoApp.Core.Entities;
 using TodoApp.UseCases.DTOs;
 using TodoApp.UseCases.Interfaces;
 
 namespace TodoApp.Web.Endpoints.TodoItems;
 
-
-
 public class GetAllTodoItemsEndpoint : Endpoint<GetAllTodoItemsDTO, GetAllTodoItemsResponseDTO>
 {
     private readonly ITodoItemRepository _todoItemRepository;
     private readonly ILogger<GetAllTodoItemsEndpoint> _logger;
+    private readonly UserManager<User> _userManager;
 
-    public GetAllTodoItemsEndpoint(ITodoItemRepository todoItemRepository, ILogger<GetAllTodoItemsEndpoint> logger)
+    public GetAllTodoItemsEndpoint(ITodoItemRepository todoItemRepository, ILogger<GetAllTodoItemsEndpoint> logger, UserManager<User> userManager)
     {
         _todoItemRepository = todoItemRepository;
         _logger = logger;
+        _userManager = userManager;
     }
 
     public override void Configure()
@@ -46,10 +47,14 @@ public class GetAllTodoItemsEndpoint : Endpoint<GetAllTodoItemsDTO, GetAllTodoIt
 
     public override async Task HandleAsync(GetAllTodoItemsDTO req, CancellationToken ct)
     {
-        var userId = HttpContext.User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+        var userEmail = HttpContext.User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
 
         _logger.LogInformation("Retrieving all todo items");
-        _logger.LogInformation($"User ID: {userId}");
+        _logger.LogInformation($"User userEmail: {userEmail}");
+
+
+        var user = await _userManager.FindByEmailAsync(userEmail);
+        var userId = await _userManager.GetUserIdAsync(user);
 
         if (userId == null)
         {

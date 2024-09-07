@@ -1,5 +1,6 @@
 using AutoMapper;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
 using TodoApp.Core.Entities;
 using TodoApp.Infrastructure.Persistense;
 using TodoApp.UseCases.DTOs;
@@ -11,11 +12,13 @@ public class TodoItemRepository : ITodoItemRepository
 {
     private readonly ApplicationDbContext _context;
     private readonly IMapper _mapper;
+    private readonly ILogger<TodoItemRepository> _logger;
 
-    public TodoItemRepository(ApplicationDbContext context, IMapper mapper)
+    public TodoItemRepository(ApplicationDbContext context, IMapper mapper, ILogger<TodoItemRepository> logger)
     {
         _context = context;
         _mapper = mapper;
+        _logger = logger;
     }
 
     public async Task<GetTodoItemByIdResponseDTO?> GetByIdAsync(string userId, int todoItemId)
@@ -28,8 +31,23 @@ public class TodoItemRepository : ITodoItemRepository
 
     public async Task<IEnumerable<TodoItem>> GetAllAsync(string UserId)
     {
+        _logger.LogInformation("Retrieving all todo items");
+        _logger.LogInformation($"User ID: {UserId}");
+
+        if (string.IsNullOrWhiteSpace(UserId))
+        {
+            _logger.LogWarning("User ID is null or whitespace.");
+            return Enumerable.Empty<TodoItem>();
+        }
+
+        // Log the SQL query being executed for debugging purposes
+        var sqlQuery = _context.TodoItems.Where(x => x.UserId == UserId).ToQueryString();
+        _logger.LogInformation($"Executing SQL Query: {sqlQuery}");
+
         // Return all TodoItems that belong to the user ONLY! use the request.UserId to filter the TodoItems
         var todoItems = await _context.TodoItems.Where(x => x.UserId == UserId).ToArrayAsync();
+
+        _logger.LogInformation($"Retrieved {todoItems.Length} todo items");
 
         return todoItems;
     }
