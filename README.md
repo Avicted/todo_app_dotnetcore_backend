@@ -18,7 +18,7 @@ cd ..
 
 Open the swagger page:
 
-[http://localhost:1337/swagger](http://localhost:5131/swagger)
+[http://localhost:1337/swagger](http://localhost:1337/swagger)
 
 
 # Swagger
