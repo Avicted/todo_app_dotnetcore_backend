@@ -57,7 +57,7 @@ public class GetAllTodoItemsEndpoint : Endpoint<GetAllTodoItemsDTO, GetAllTodoIt
 
     public override async Task HandleAsync(GetAllTodoItemsDTO req, CancellationToken ct)
     {
-        var userEmail = HttpContext.User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+        var userEmail = HttpContext.User.FindFirst(ClaimTypes.Email)?.Value;
 
         _logger.LogInformation("Retrieving all todo items");
         _logger.LogInformation($"User userEmail: {userEmail}");

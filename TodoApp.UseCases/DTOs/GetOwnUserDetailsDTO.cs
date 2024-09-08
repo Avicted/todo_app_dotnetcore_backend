@@ -4,5 +4,5 @@ namespace TodoApp.UseCases.DTOs;
 
 public class GetOwnUserDetailsDTO
 {
-    public string Id { get; set; }
+
 }

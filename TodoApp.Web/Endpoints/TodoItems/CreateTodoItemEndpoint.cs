@@ -43,10 +43,14 @@ public class CreateTodoItemEndpoint : Endpoint<CreateTodoItemDTO, CreateTodoItem
     {
         // Get the user's email from the claims
         var email = HttpContext.User.FindFirst(ClaimTypes.Email)?.Value;
+        // var userId = HttpContext.User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+
+        _logger.LogInformation("CreateTodoItem Retrieving email: {0}", email);
 
         // If the email is not found, return a 401
         if (email == null)
         {
+            _logger.LogError("Email is null");
             AddError("Unauthorized");
             await SendErrorsAsync(StatusCodes.Status401Unauthorized, ct);
             return;
@@ -60,6 +64,7 @@ public class CreateTodoItemEndpoint : Endpoint<CreateTodoItemDTO, CreateTodoItem
         // If the user is not found, return a 404
         if (user == null)
         {
+            _logger.LogError("User not found");
             AddError("User not found");
             await SendErrorsAsync(StatusCodes.Status404NotFound, ct);
             return;
@@ -80,6 +85,7 @@ public class CreateTodoItemEndpoint : Endpoint<CreateTodoItemDTO, CreateTodoItem
         // If the TodoItem is not added, return a 400
         if (res == null)
         {
+            _logger.LogError("TodoItem not added");
             AddError("TodoItem not added");
             await SendErrorsAsync(StatusCodes.Status400BadRequest, ct);
             return;

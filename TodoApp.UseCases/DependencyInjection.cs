@@ -10,6 +10,7 @@ public static class DependencyInjection
     {
         services.AddAutoMapper(typeof(DependencyInjection).Assembly);
 
+        // services.AddScoped<JwtService>(); // Register JwtService
         services.AddScoped<TodoItemService>(); // Register TodoItemService
 
         return services;

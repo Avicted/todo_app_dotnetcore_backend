@@ -38,31 +38,22 @@ public class DeleteTodoItemEndpoint : Endpoint<DeleteTodoItemDTO, DeleteTodoItem
 
     public override async Task<DeleteTodoItemResponseDTO> HandleAsync(DeleteTodoItemDTO request, CancellationToken cancellationToken)
     {
-        var userEmail = HttpContext.User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+        var userId = HttpContext.User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
 
         _logger.LogInformation("Retrieving all todo items");
-        _logger.LogInformation($"User userEmail: {userEmail}");
-
-        if (userEmail == null)
-        {
-            AddError("Unauthorized");
-            await SendErrorsAsync(StatusCodes.Status401Unauthorized, cancellationToken);
-            return null!;
-        }
-
-
-        var user = await _userManager.FindByEmailAsync(userEmail);
-        if (user == null)
-        {
-            AddError("Unauthorized");
-            await SendErrorsAsync(StatusCodes.Status401Unauthorized, cancellationToken);
-            return null!;
-        }
-
-        var userId = await _userManager.GetUserIdAsync(user);
+        _logger.LogInformation($"User Id: {userId}");
 
         if (userId == null)
         {
+            _logger.LogError("userEmail is null");
+            AddError("Unauthorized");
+            await SendErrorsAsync(StatusCodes.Status401Unauthorized, cancellationToken);
+            return null!;
+        }
+
+        if (userId == null)
+        {
+            _logger.LogError("UserId is null");
             AddError("Unauthorized");
             await SendErrorsAsync(StatusCodes.Status401Unauthorized, cancellationToken);
             return null!;
@@ -72,7 +63,7 @@ public class DeleteTodoItemEndpoint : Endpoint<DeleteTodoItemDTO, DeleteTodoItem
 
         if (response == null)
         {
-            _logger.LogInformation("TodoItem not found");
+            _logger.LogError("TodoItem not found");
 
             AddError("TodoItem not found");
             await SendErrorsAsync(StatusCodes.Status404NotFound, cancellationToken);

@@ -1,11 +1,8 @@
-using System.IdentityModel.Tokens.Jwt;
-using System.Security.Claims;
-using System.Text;
-using FastEndpoints;
+/*using FastEndpoints;
 using Microsoft.AspNetCore.Identity;
-using Microsoft.IdentityModel.Tokens;
 using TodoApp.Core.Entities;
 using TodoApp.UseCases.DTOs;
+using TodoApp.UseCases.Services;
 
 namespace TodoApp.Web.Endpoints.Authentication;
 
@@ -17,12 +14,20 @@ public class CustomLoginEndpoint : Endpoint<LoginRequestDTO, LoginResponseDTO>
     private readonly IConfiguration _configuration;
     private readonly ILogger<CustomLoginEndpoint> _logger;
 
-    public CustomLoginEndpoint(SignInManager<User> signInManager, UserManager<User> userManager, IConfiguration configuration, ILogger<CustomLoginEndpoint> logger)
+    private readonly JwtService _jwtService;
+
+    public CustomLoginEndpoint(
+        SignInManager<User> signInManager,
+        UserManager<User> userManager,
+        IConfiguration configuration,
+        ILogger<CustomLoginEndpoint> logger,
+        JwtService jwtService)
     {
         _signInManager = signInManager;
         _userManager = userManager;
         _configuration = configuration;
         _logger = logger;
+        _jwtService = jwtService;
     }
 
     public override void Configure()
@@ -53,7 +58,7 @@ public class CustomLoginEndpoint : Endpoint<LoginRequestDTO, LoginResponseDTO>
             return;
         }
 
-        var token = GenerateJwtToken(user);
+        // var token = _jwtService.GenerateJwtToken(user);
 
         var response = new LoginResponseDTO
         {
@@ -62,32 +67,9 @@ public class CustomLoginEndpoint : Endpoint<LoginRequestDTO, LoginResponseDTO>
             TokenType = "Bearer",
             AccessToken = token,
             ExpiresIn = 3600, // Set to your desired expiration time
-            RefreshToken = "not-implemented" // Handle refresh token generation if needed
+            RefreshToken = JwtService.GenerateRefreshToken().Token
         };
 
-        await SendAsync(response);
+        await SendAsync(response, StatusCodes.Status200OK, ct);
     }
-
-    private string GenerateJwtToken(User user)
-    {
-        var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["Jwt:SigningKey"]));
-        var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
-
-        var claims = new[]
-        {
-            new Claim(JwtRegisteredClaimNames.Sub, user.UserName),
-            new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
-            new Claim(JwtRegisteredClaimNames.Email, user.Email),
-            new Claim("id", user.Id) // Include user ID as a claim
-        };
-
-        var token = new JwtSecurityToken(
-            issuer: _configuration["Jwt:Issuer"],
-            audience: _configuration["Jwt:Audience"],
-            claims: claims,
-            expires: DateTime.UtcNow.AddHours(1), // Set to your desired expiration time
-            signingCredentials: creds);
-
-        return new JwtSecurityTokenHandler().WriteToken(token);
-    }
-}
+}*/

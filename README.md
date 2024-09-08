@@ -3,6 +3,28 @@
 # Work in progress!
 - Tests missing
 
+### Migrations
+```bash
+# Creat a migration
+dotnet ef migrations add <MigrationName> --startup-project  TodoApp.Web/TodoApp.Web.csproj --project TodoApp.Infrastructure/TodoApp.Infrastructure.csproj
+
+# Update/Seed database from within the Web project
+cd TodoApp.Web
+dotnet ef database update --context ApplicationDbContext --project ../TodoApp.Infrastructure/TodoApp.Infrastructure.csproj --startup-project TodoApp.Web.csproj
+
+```
+
+# Run the project
+
+```bash
+# Update/Seed database from within the Web project
+cd TodoApp.Web
+dotnet ef database update --context ApplicationDbContext --project ../TodoApp.Infrastructure/TodoApp.Infrastructure.csproj --startup-project TodoApp.Web.csproj
+
+./start.sh
+```
+
+
 ### Initial setup, already done
 ```bash
 # From project root
@@ -27,31 +49,18 @@ dotnet add package Microsoft.AspNetCore.Identity.EntityFrameworkCore
 dotnet add package Microsoft.IdentityModel
 
 
+cd TodoApp.UseCases
+dotnet add package AutoMapper
+dotnet add package FastEndpoints
+dotnet add package Microsoft.AspNetCore.Authentication.JwtBearer
+
+
 cd TodoApp.Core
 dotnet add package Microsoft.AspNetCore.Identity
 dotnet add package Microsoft.AspNetCore.Identity.EntityFrameworkCore
 ```
 
-### Migrations
-```bash
-# Creat a migration
-dotnet ef migrations add <MigrationName> --startup-project  TodoApp.Web/TodoApp.Web.csproj --project TodoApp.Infrastructure/TodoApp.Infrastructure.csproj
 
-# Update/Seed database from within the Web project
-cd TodoApp.Web
-dotnet ef database update --context ApplicationDbContext --project ../TodoApp.Infrastructure/TodoApp.Infrastructure.csproj --startup-project TodoApp.Web.csproj
-
-```
-
-# Run the project
-
-```bash
-# Update/Seed database from within the Web project
-cd TodoApp.Web
-dotnet ef database update --context ApplicationDbContext --project ../TodoApp.Infrastructure/TodoApp.Infrastructure.csproj --startup-project TodoApp.Web.csproj
-
-./start.sh
-```
 
 Open the swagger page:
 

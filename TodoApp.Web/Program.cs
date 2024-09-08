@@ -10,6 +10,8 @@ using TodoApp.Infrastructure;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
+using Microsoft.IdentityModel.JsonWebTokens;
+using System.Security.Claims;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -47,8 +49,8 @@ builder.Services.AddDataProtection();
 
 builder.Services.AddAuthentication(options =>
 {
-    options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
-    options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+    //  options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+    //  options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
 })
 .AddJwtBearer(options =>
 {
@@ -60,8 +62,9 @@ builder.Services.AddAuthentication(options =>
         ValidateIssuerSigningKey = true,
         ValidIssuer = builder.Configuration["Jwt:Issuer"],
         ValidAudience = builder.Configuration["Jwt:Audience"],
-        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["Jwt:SigningKey"]))
+        IssuerSigningKey = new SymmetricSecurityKey(Encoding.ASCII.GetBytes(builder.Configuration["Jwt:SigningKey"]))
     };
+    options.UseSecurityTokenValidators = true;
 });
 
 
@@ -94,6 +97,7 @@ if (app.Environment.IsDevelopment())
 app.UseRouting();
 
 app.UseCors(AllowSpecificOrigins);
+
 app.UseAuthentication(); // Ensure authentication is used
 app.UseAuthorization();  // Ensure authorization is used
 
