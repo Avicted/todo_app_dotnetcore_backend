@@ -1,9 +1,42 @@
 # Dotnet Core minimal Clean Architecture
+## Super Enterprise Todo App™ 
 
-# Work in progress!
-- Tests missing
+### Work in progress !
+- Tests are missing
 
-### Migrations
+# Run the project
+
+```bash
+# Update/Seed database from within the Web project
+cd TodoApp.Web
+dotnet ef database update --context ApplicationDbContext --project ../TodoApp.Infrastructure/TodoApp.Infrastructure.csproj --startup-project TodoApp.Web.csproj
+
+# Go back to the project root
+cd ..
+./start.sh
+```
+
+Open the swagger page:
+
+[http://localhost:1337/swagger](http://localhost:5131/swagger)
+
+
+# Swagger
+![Swagger page](swagger.png "Swagger page")
+
+
+###  Deal with any new Warnings
+```bash
+dotnet list package --outdated
+
+# Update packages
+dotnet add package [PackageName] --version [LatestVersion]
+
+# Implement the changes
+```
+
+
+### Any new Migration
 ```bash
 # Creat a migration
 dotnet ef migrations add <MigrationName> --startup-project  TodoApp.Web/TodoApp.Web.csproj --project TodoApp.Infrastructure/TodoApp.Infrastructure.csproj
@@ -14,18 +47,8 @@ dotnet ef database update --context ApplicationDbContext --project ../TodoApp.In
 
 ```
 
-# Run the project
 
-```bash
-# Update/Seed database from within the Web project
-cd TodoApp.Web
-dotnet ef database update --context ApplicationDbContext --project ../TodoApp.Infrastructure/TodoApp.Infrastructure.csproj --startup-project TodoApp.Web.csproj
-
-./start.sh
-```
-
-
-### Initial setup, already done
+#### Initial setup, already done for documentation purposes
 ```bash
 # From project root
 
@@ -58,24 +81,4 @@ dotnet add package Microsoft.AspNetCore.Authentication.JwtBearer
 cd TodoApp.Core
 dotnet add package Microsoft.AspNetCore.Identity
 dotnet add package Microsoft.AspNetCore.Identity.EntityFrameworkCore
-```
-
-
-
-Open the swagger page:
-
-[http://localhost:1337/swagger](http://localhost:5131/swagger)
-
-
-
-# Swagger
-![Swagger page](swagger.png "Swagger page")
-
-
-# Deal with Warnings
-```bash
-dotnet list package --outdated
-
-# Update packages
-dotnet add package [PackageName] --version [LatestVersion]
 ```
