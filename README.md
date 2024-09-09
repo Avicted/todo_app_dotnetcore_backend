@@ -1,6 +1,9 @@
 # Dotnet Core minimal Clean Architecture
 ## Super Enterprise Todo App™ 
 
+Backend for the React Frontend Todo App™
+https://github.com/Avicted/todo_app_vite_react_frontend
+
 ### Work in progress !
 - Tests are missing
 
