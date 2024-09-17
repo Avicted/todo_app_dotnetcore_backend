@@ -10,9 +10,12 @@ https://github.com/Avicted/todo_app_vite_react_frontend
 
 # Run the project
 
+## Docker that can interact with the frontend
 ```bash
-docker-compose up --build --force-recreate
+docker network create shared-network
+docker-compose up
 ```
+
 
 ## Run the project without Docker
 ```bash

@@ -3,7 +3,13 @@ services:
         build:
             context: .
             dockerfile: Dockerfile
+        networks:
+            - shared-network
         ports:
             - "1337:1337"
         environment:
             ASPNETCORE_ENVIRONMENT: Development
+
+networks:
+    shared-network:
+        external: true

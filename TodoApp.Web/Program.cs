@@ -1,7 +1,6 @@
 using TodoApp.UseCases.Interfaces;
 using TodoApp.Infrastructure.Persistense;
 using Microsoft.EntityFrameworkCore;
-using TodoApp.Infrastructure.Persistense;
 using TodoApp.Infrastructure.Repositories;
 using FastEndpoints;
 using FastEndpoints.Swagger;
@@ -9,11 +8,9 @@ using TodoApp.Core.Entities;
 using Microsoft.AspNetCore.Identity;
 using TodoApp.UseCases;
 using TodoApp.Infrastructure;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
-using Microsoft.IdentityModel.JsonWebTokens;
-using System.Security.Claims;
+using TodoApp.Web;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -30,12 +27,16 @@ builder.Services.AddCors(options =>
     options.AddPolicy(name: AllowSpecificOrigins,
     policy =>
     {
-        policy.WithOrigins([
-            "http://localhost:5173",
-            "http://0.0.0.0:5173",
-        ])
-        .AllowAnyHeader()
-        .AllowAnyMethod();
+        // @(Victor): Todo: Add the origins that are allowed to access the API
+        // policy.WithOrigins([
+        //     "http://localhost:5173",
+        //     "http://0.0.0.0:5173",
+        //     "http://0.0.0.0:80",
+        //     "http://localhost:80",
+        // ])
+        policy.AllowAnyOrigin()
+            .AllowAnyHeader()
+            .AllowAnyMethod();
     });
 });
 
@@ -112,6 +113,7 @@ using (var scope = app.Services.CreateScope())
 app.UseRouting();
 
 app.UseCors(AllowSpecificOrigins);
+// app.UseCorsPolicyInspector(); // Add custom middleware to inspect CORS policy
 
 app.UseAuthentication(); // Ensure authentication is used
 app.UseAuthorization();  // Ensure authorization is used
