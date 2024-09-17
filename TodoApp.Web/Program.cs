@@ -1,5 +1,7 @@
 using TodoApp.UseCases.Interfaces;
 using TodoApp.Infrastructure.Persistense;
+using Microsoft.EntityFrameworkCore;
+using TodoApp.Infrastructure.Persistense;
 using TodoApp.Infrastructure.Repositories;
 using FastEndpoints;
 using FastEndpoints.Swagger;
@@ -28,9 +30,12 @@ builder.Services.AddCors(options =>
     options.AddPolicy(name: AllowSpecificOrigins,
     policy =>
     {
-        policy.WithOrigins("http://localhost:5173")
-            .AllowAnyHeader()
-            .AllowAnyMethod();
+        policy.WithOrigins([
+            "http://localhost:5173",
+            "http://0.0.0.0:5173",
+        ])
+        .AllowAnyHeader()
+        .AllowAnyMethod();
     });
 });
 
@@ -91,6 +96,16 @@ if (app.Environment.IsDevelopment())
     app.UseDeveloperExceptionPage();
 }
 
+// Apply all Database migrations
+using (var scope = app.Services.CreateScope())
+{
+    var services = scope.ServiceProvider;
+    var context = services.GetRequiredService<ApplicationDbContext>();
+
+    // Apply pending migrations to the database
+    context.Database.Migrate();
+}
+
 // app.UseHttpsRedirection();
 // app.UseStaticFiles();
 
@@ -107,5 +122,7 @@ app.MapGroup("/api")
 
 app.UseFastEndpoints()
     .UseSwaggerGen();
+
+app.Urls.Add("http://0.0.0.0:1337");
 
 app.Run();

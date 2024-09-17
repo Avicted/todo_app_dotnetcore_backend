@@ -11,6 +11,11 @@ https://github.com/Avicted/todo_app_vite_react_frontend
 # Run the project
 
 ```bash
+docker-compose up --build --force-recreate
+```
+
+## Run the project without Docker
+```bash
 # Update/Seed database from within the Web project
 cd TodoApp.Web
 dotnet ef database update --context ApplicationDbContext --project ../TodoApp.Infrastructure/TodoApp.Infrastructure.csproj --startup-project TodoApp.Web.csproj

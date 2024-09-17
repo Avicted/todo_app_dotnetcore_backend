@@ -1,0 +1,9 @@
+services:
+    todo_backend:
+        build:
+            context: .
+            dockerfile: Dockerfile
+        ports:
+            - "1337:1337"
+        environment:
+            ASPNETCORE_ENVIRONMENT: Development
